@@ -30,17 +30,9 @@ namespace Infrastructure.Repository
 
         public async Task<bool> AddUserAsync(User user)
         {
-            //    _dbContext.Users.Add(user);
-            //    return await _dbContext.SaveChangesAsync() > 0;
+            _dbContext.Users.Add(user);
+            return await _dbContext.SaveChangesAsync() > 0;
 
-            var result = await _userManager.CreateAsync(user, user.PasswordHash);
-
-            if (result.Succeeded)            {
-                
-                await _userManager.AddToRoleAsync(user, "User");
-            }
-
-            return true;
         }
     }
 }

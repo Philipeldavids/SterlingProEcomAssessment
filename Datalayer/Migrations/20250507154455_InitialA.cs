@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class newDBDOne : Migration
+    public partial class InitialA : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,7 +72,7 @@ namespace Infrastructure.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -199,8 +199,7 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProductId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     AddedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -215,8 +214,8 @@ namespace Infrastructure.Migrations
                         principalTable: "Carts",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_CartItems_Products_ProductId1",
-                        column: x => x.ProductId1,
+                        name: "FK_CartItems_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -227,8 +226,8 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "Brand", "Category", "CreatedAt", "Description", "Name", "Price", "ProductImageUrl", "Quantity", "UnitCost" },
                 values: new object[,]
                 {
-                    { new Guid("7db10644-a294-4f7f-818a-fc0e0d884643"), "Sony", "Electronics", new DateTime(2025, 5, 7, 14, 58, 6, 910, DateTimeKind.Utc).AddTicks(5725), "Portable and powerful.", "Bluetooth Speaker", 15000m, "https://via.placeholder.com/200", 10, 11000m },
-                    { new Guid("f4946ab0-6fb0-4653-9dfc-ba133edafcd7"), "Samsung", "Wearables", new DateTime(2025, 5, 7, 14, 58, 6, 910, DateTimeKind.Utc).AddTicks(5745), "Waterproof and stylish.", "Smart Watch", 25000m, "https://via.placeholder.com/200", 20, 18000m }
+                    { "02686711-c78f-45dc-b2da-35d3f995a89a", "Samsung", "Wearables", new DateTime(2025, 5, 7, 15, 44, 54, 476, DateTimeKind.Utc).AddTicks(1600), "Waterproof and stylish.", "Smart Watch", 25000m, "https://via.placeholder.com/200", 20, 18000m },
+                    { "8c215632-3fbd-44b9-83b7-ad5acbbb4b37", "Sony", "Electronics", new DateTime(2025, 5, 7, 15, 44, 54, 476, DateTimeKind.Utc).AddTicks(1574), "Portable and powerful.", "Bluetooth Speaker", 15000m, "https://via.placeholder.com/200", 10, 11000m }
                 });
 
             migrationBuilder.CreateIndex(
@@ -276,9 +275,9 @@ namespace Infrastructure.Migrations
                 column: "CartId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CartItems_ProductId1",
+                name: "IX_CartItems_ProductId",
                 table: "CartItems",
-                column: "ProductId1");
+                column: "ProductId");
         }
 
         /// <inheritdoc />

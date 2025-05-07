@@ -49,10 +49,7 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("ProductId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("ProductId1")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -65,16 +62,15 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.HasIndex("ProductId1");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("Core.Models.Product", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Brand")
                         .IsRequired()
@@ -115,10 +111,10 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7db10644-a294-4f7f-818a-fc0e0d884643"),
+                            Id = "8c215632-3fbd-44b9-83b7-ad5acbbb4b37",
                             Brand = "Sony",
                             Category = "Electronics",
-                            CreatedAt = new DateTime(2025, 5, 7, 14, 58, 6, 910, DateTimeKind.Utc).AddTicks(5725),
+                            CreatedAt = new DateTime(2025, 5, 7, 15, 44, 54, 476, DateTimeKind.Utc).AddTicks(1574),
                             Description = "Portable and powerful.",
                             Name = "Bluetooth Speaker",
                             Price = 15000m,
@@ -128,10 +124,10 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f4946ab0-6fb0-4653-9dfc-ba133edafcd7"),
+                            Id = "02686711-c78f-45dc-b2da-35d3f995a89a",
                             Brand = "Samsung",
                             Category = "Wearables",
-                            CreatedAt = new DateTime(2025, 5, 7, 14, 58, 6, 910, DateTimeKind.Utc).AddTicks(5745),
+                            CreatedAt = new DateTime(2025, 5, 7, 15, 44, 54, 476, DateTimeKind.Utc).AddTicks(1600),
                             Description = "Waterproof and stylish.",
                             Name = "Smart Watch",
                             Price = 25000m,
@@ -363,7 +359,7 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Core.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId1")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

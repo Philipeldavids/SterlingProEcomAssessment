@@ -23,7 +23,7 @@ namespace Infrastructure.Data
             modelBuilder.Entity<Product>().HasData(
             new Product
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 Name = "Bluetooth Speaker",
                 Description = "Portable and powerful.",
                 Category = "Electronics",
@@ -36,7 +36,7 @@ namespace Infrastructure.Data
             },
             new Product
             {
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid().ToString(),
                 Name = "Smart Watch",
                 Description = "Waterproof and stylish.",
                 Category = "Wearables",
