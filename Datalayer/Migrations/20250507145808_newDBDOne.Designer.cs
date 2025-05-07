@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250507021555_Initial")]
-    partial class Initial
+    [Migration("20250507145808_newDBDOne")]
+    partial class newDBDOne
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,12 +27,12 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Models.Cart", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -41,22 +41,34 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Models.CartItem", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid>("CartId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<DateTime>("AddedAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<Guid>("ProductId")
+                    b.Property<string>("CartId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProductId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId1");
 
                     b.ToTable("CartItems");
                 });
@@ -102,6 +114,34 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("7db10644-a294-4f7f-818a-fc0e0d884643"),
+                            Brand = "Sony",
+                            Category = "Electronics",
+                            CreatedAt = new DateTime(2025, 5, 7, 14, 58, 6, 910, DateTimeKind.Utc).AddTicks(5725),
+                            Description = "Portable and powerful.",
+                            Name = "Bluetooth Speaker",
+                            Price = 15000m,
+                            ProductImageUrl = "https://via.placeholder.com/200",
+                            Quantity = 10,
+                            UnitCost = 11000m
+                        },
+                        new
+                        {
+                            Id = new Guid("f4946ab0-6fb0-4653-9dfc-ba133edafcd7"),
+                            Brand = "Samsung",
+                            Category = "Wearables",
+                            CreatedAt = new DateTime(2025, 5, 7, 14, 58, 6, 910, DateTimeKind.Utc).AddTicks(5745),
+                            Description = "Waterproof and stylish.",
+                            Name = "Smart Watch",
+                            Price = 25000m,
+                            ProductImageUrl = "https://via.placeholder.com/200",
+                            Quantity = 20,
+                            UnitCost = 18000m
+                        });
                 });
 
             modelBuilder.Entity("Core.Models.User", b =>
@@ -320,13 +360,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Models.CartItem", b =>
                 {
-                    b.HasOne("Core.Models.Cart", "Cart")
+                    b.HasOne("Core.Models.Cart", null)
                         .WithMany("Items")
-                        .HasForeignKey("CartId")
+                        .HasForeignKey("CartId");
+
+                    b.HasOne("Core.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Cart");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

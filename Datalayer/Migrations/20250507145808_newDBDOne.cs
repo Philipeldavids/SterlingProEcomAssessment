@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class newDBDOne : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -58,8 +60,8 @@ namespace Infrastructure.Migrations
                 name: "Carts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -196,10 +198,13 @@ namespace Infrastructure.Migrations
                 name: "CartItems",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CartId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    AddedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CartId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -208,8 +213,22 @@ namespace Infrastructure.Migrations
                         name: "FK_CartItems_Carts_CartId",
                         column: x => x.CartId,
                         principalTable: "Carts",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_CartItems_Products_ProductId1",
+                        column: x => x.ProductId1,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "Id", "Brand", "Category", "CreatedAt", "Description", "Name", "Price", "ProductImageUrl", "Quantity", "UnitCost" },
+                values: new object[,]
+                {
+                    { new Guid("7db10644-a294-4f7f-818a-fc0e0d884643"), "Sony", "Electronics", new DateTime(2025, 5, 7, 14, 58, 6, 910, DateTimeKind.Utc).AddTicks(5725), "Portable and powerful.", "Bluetooth Speaker", 15000m, "https://via.placeholder.com/200", 10, 11000m },
+                    { new Guid("f4946ab0-6fb0-4653-9dfc-ba133edafcd7"), "Samsung", "Wearables", new DateTime(2025, 5, 7, 14, 58, 6, 910, DateTimeKind.Utc).AddTicks(5745), "Waterproof and stylish.", "Smart Watch", 25000m, "https://via.placeholder.com/200", 20, 18000m }
                 });
 
             migrationBuilder.CreateIndex(
@@ -255,6 +274,11 @@ namespace Infrastructure.Migrations
                 name: "IX_CartItems_CartId",
                 table: "CartItems",
                 column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItems_ProductId1",
+                table: "CartItems",
+                column: "ProductId1");
         }
 
         /// <inheritdoc />
@@ -279,9 +303,6 @@ namespace Infrastructure.Migrations
                 name: "CartItems");
 
             migrationBuilder.DropTable(
-                name: "Products");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
@@ -289,6 +310,9 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Carts");
+
+            migrationBuilder.DropTable(
+                name: "Products");
         }
     }
 }

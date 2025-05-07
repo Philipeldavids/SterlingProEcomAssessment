@@ -20,8 +20,35 @@ namespace Infrastructure.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Product>().HasData(
+            new Product
+            {
+                Id = Guid.NewGuid(),
+                Name = "Bluetooth Speaker",
+                Description = "Portable and powerful.",
+                Category = "Electronics",
+                ProductImageUrl = "https://via.placeholder.com/200",
+                Quantity = 10,
+                Brand = "Sony",
+                Price = 15000,
+                UnitCost = 11000,
+                CreatedAt = DateTime.UtcNow
+            },
+            new Product
+            {
+                Id = Guid.NewGuid(),
+                Name = "Smart Watch",
+                Description = "Waterproof and stylish.",
+                Category = "Wearables",
+                ProductImageUrl = "https://via.placeholder.com/200",
+                Quantity = 20,
+                Brand = "Samsung",
+                Price = 25000,
+                UnitCost = 18000,
+                CreatedAt = DateTime.UtcNow
+            });
             // Define composite primary key using HasKey
-            
+
             modelBuilder.Entity<Product>()
                 .HasKey(c => c.Id);
             modelBuilder.Entity<Cart>()
@@ -30,9 +57,9 @@ namespace Infrastructure.Data
                 .HasKey(c => c.Id);
         }
 
-        DbSet<Product> Products { get; set; }
-        DbSet<Cart> Carts { get; set; }
-        DbSet<CartItem> CartItems { get; set; }
+       public DbSet<Product> Products { get; set; }
+       public DbSet<Cart> Carts { get; set; }
+       public DbSet<CartItem> CartItems { get; set; }
     }
 
     }
