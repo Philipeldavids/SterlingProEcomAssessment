@@ -19,8 +19,7 @@ namespace SterlingProEcommerce.Controllers
             _productService = productService;
         }
 
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Dashboard()
+         public async Task<IActionResult> Dashboard()
         {
             return View();
         }

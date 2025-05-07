@@ -65,7 +65,7 @@ namespace SterlingProEcommerce.Controllers
         public IActionResult LogOut()
         {
             HttpContext.Session.Remove("JWTToken");
-            HttpContext.SignOutAsync();
+            HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
 
