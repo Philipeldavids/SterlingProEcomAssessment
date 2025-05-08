@@ -22,8 +22,8 @@ namespace Infrastructure.Repository
 
             public async Task AddToCartAsync(string productId, int quantity)
             {
-                var existingItem = await _context.CartItems
-                    .FirstOrDefaultAsync(c => c.ProductId == productId);
+                var existingItem = _context.CartItems.Where(c => c.ProductId == productId)
+                    .FirstOrDefault();
 
                 if (existingItem != null)
                 {
@@ -37,34 +37,34 @@ namespace Infrastructure.Repository
                         Quantity = quantity,
                         
                     };
-                    await _context.CartItems.AddAsync(newItem);
+                    _context.CartItems.Add(newItem);
                 }
 
-                await _context.SaveChangesAsync();
+                 _context.SaveChanges();
             }
 
             public async Task<List<CartItem>> GetCartItemsAsync()
             {
-                return await _context.CartItems
+                return _context.CartItems
                     .Include(c => c.Product)                                       
-                    .ToListAsync();
+                    .ToList();
             }
 
             public async Task<int> GetCartItemCountAsync()
             {
-                return await _context.CartItems                    
-                    .SumAsync(c => c.Quantity);
+                return _context.CartItems                    
+                    .Sum(c => c.Quantity);
             }
 
             public async Task RemoveFromCartAsync(string cartItemId)
             {
-                var item = await _context.CartItems
-                    .FirstOrDefaultAsync(c => c.Id == cartItemId);
+                var item = _context.CartItems.Where(c => c.Id == cartItemId)
+                    .FirstOrDefault();
 
                 if (item != null)
                 {
                     _context.CartItems.Remove(item);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
             }
         }

@@ -22,24 +22,38 @@
         </div>
     }
 </div>
+
 @section scripts {
 <script>
-    async function addToCart(productId) {
-        const response = await fetch('/Cart/Add', {
+    function addToCart(productId) {
+        $.ajax({
+            url: '/Cart/Add',
             method: 'POST',
+            data: JSON.stringify({ productId: productId, quantity: 1 }), // Send the data as JSON
+            contentType: 'application/json', // Set the content type to JSON
             headers: {
-                'Content-Type': 'application/json',
-                'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() // Send the anti-forgery token
             },
-            body: JSON.stringify({ productId, quantity: 1 })
+            success: function (response) {
+                // On success, fetch the updated cart count
+                $.ajax({
+                    url: '/Cart/GetCartCount',
+                    method: 'GET',
+                    success: function (count) {
+                        console.log(count);
+                        $('#cart-count').text(count); // Update the cart count in the layout
+                    },
+                    error: function (err) {
+                        console.error('Error fetching cart count:', err);
+                    }
+                });
+            },
+            error: function (err) {
+                console.error('Error adding to cart:', err);
+            }
         });
-
-        if (response.ok) {
-            const countResponse = await fetch('/Cart/GetCartCount');
-            const count = await countResponse.text();
-            document.getElementById('cart-count').textContent = count;
-        }
     }
 </script>
-
 }
+
+

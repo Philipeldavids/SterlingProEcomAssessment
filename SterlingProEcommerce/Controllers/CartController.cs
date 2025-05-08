@@ -34,8 +34,9 @@ namespace SterlingProEcommerce.Controllers
 
                 model.Quantity = item.Quantity;
                 model.Price = item.Product.Price;
-                model.Id = item.ProductId;
+                model.Id = item.Id;
                 model.ProductName = item.Product.Name;
+                
 
                 Items.Add(model);
                
@@ -53,7 +54,7 @@ namespace SterlingProEcommerce.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCartCount()        {
+        public async Task<ContentResult> GetCartCount()        {
            
             var count = await _cartService.GetCartItemCountAsync();
             return Content(count.ToString());
