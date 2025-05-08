@@ -20,10 +20,10 @@ namespace Infrastructure.Repository
         }
       
 
-            public async Task AddToCartAsync(string userId, string productId, int quantity)
+            public async Task AddToCartAsync(string productId, int quantity)
             {
                 var existingItem = await _context.CartItems
-                    .FirstOrDefaultAsync(c => c.ProductId == productId && c.UserId == userId);
+                    .FirstOrDefaultAsync(c => c.ProductId == productId);
 
                 if (existingItem != null)
                 {
@@ -35,7 +35,7 @@ namespace Infrastructure.Repository
                     {
                         ProductId = productId,
                         Quantity = quantity,
-                        UserId = userId
+                        
                     };
                     await _context.CartItems.AddAsync(newItem);
                 }
@@ -43,25 +43,23 @@ namespace Infrastructure.Repository
                 await _context.SaveChangesAsync();
             }
 
-            public async Task<List<CartItem>> GetCartItemsAsync(string userId)
+            public async Task<List<CartItem>> GetCartItemsAsync()
             {
                 return await _context.CartItems
-                    .Include(c => c.Product)
-                    .Where(c => c.UserId == userId)                    
+                    .Include(c => c.Product)                                       
                     .ToListAsync();
             }
 
-            public async Task<int> GetCartItemCountAsync(string userId)
+            public async Task<int> GetCartItemCountAsync()
             {
-                return await _context.CartItems
-                    .Where(c => c.UserId == userId)
+                return await _context.CartItems                    
                     .SumAsync(c => c.Quantity);
             }
 
-            public async Task RemoveFromCartAsync(string cartItemId, string userId)
+            public async Task RemoveFromCartAsync(string cartItemId)
             {
                 var item = await _context.CartItems
-                    .FirstOrDefaultAsync(c => c.Id == cartItemId && c.UserId == userId);
+                    .FirstOrDefaultAsync(c => c.Id == cartItemId);
 
                 if (item != null)
                 {

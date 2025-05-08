@@ -28,8 +28,8 @@ namespace Core.Services
                 new Claim(ClaimTypes.Name, email),
                 new Claim(ClaimTypes.Email, email),
                 new Claim(ClaimTypes.NameIdentifier, userId),
-            
-        };
+
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Secret));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

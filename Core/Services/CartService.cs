@@ -17,28 +17,28 @@ namespace Core.Services
             _cartRepo = cartRepo;
         }
 
-        public async Task<bool> AddToCartAsync(string userId, string ProductId, int Quantity)
+        public async Task<bool> AddToCartAsync(string ProductId, int Quantity)
         {
-            _cartRepo.AddToCartAsync(userId, ProductId, Quantity);
+            _cartRepo.AddToCartAsync(ProductId, Quantity);
             return true;
         }
 
-        public async Task<int> GetCartItemCountAsync(string userId)
+        public async Task<int> GetCartItemCountAsync()
         {
-           var count = await _cartRepo.GetCartItemCountAsync(userId);
+           var count = await _cartRepo.GetCartItemCountAsync();
             return count;
            
         }
 
-        public async Task<List<CartItem>> GetCartItemsAsync(string userId)
+        public async Task<List<CartItem>> GetCartItemsAsync()
         {
-            var cartItems = await _cartRepo.GetCartItemsAsync(userId);
+            var cartItems = await _cartRepo.GetCartItemsAsync();
             return cartItems;
         }
 
-        public async Task<bool> RemoveFromCartAsync(string cartItemId, string userId)
+        public async Task<bool> RemoveFromCartAsync(string cartItemId)
         {
-            _cartRepo.RemoveFromCartAsync(cartItemId, userId);
+            _cartRepo.RemoveFromCartAsync(cartItemId);
             return true;
         }
     }

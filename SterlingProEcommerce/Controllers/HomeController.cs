@@ -8,6 +8,7 @@ using SterlingProEcommerce.Models.ViewModel;
 
 namespace SterlingProEcommerce.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -23,6 +24,7 @@ namespace SterlingProEcommerce.Controllers
         {
             return View();
         }
+
         public async Task<IActionResult> Index()
         {
             List<ProductViewModel> productViewModel = new List<ProductViewModel>();

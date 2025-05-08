@@ -22,6 +22,7 @@
         </div>
     }
 </div>
+@section scripts {
 <script>
     async function addToCart(productId) {
         const response = await fetch('/Cart/Add', {
@@ -41,3 +42,4 @@
     }
 </script>
 
+}

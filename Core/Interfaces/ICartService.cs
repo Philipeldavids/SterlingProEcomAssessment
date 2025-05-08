@@ -9,10 +9,10 @@ namespace Core.Interfaces
 {
     public interface ICartService
     {
-        Task<bool> AddToCartAsync(string userId, string productId, int quantity);
-        Task<List<CartItem>> GetCartItemsAsync(string userId);
-        Task<int> GetCartItemCountAsync(string userId);
-        Task<bool> RemoveFromCartAsync(string cartItemId, string userId);
+        Task<bool> AddToCartAsync(string productId, int quantity);
+        Task<List<CartItem>> GetCartItemsAsync();
+        Task<int> GetCartItemCountAsync();
+        Task<bool> RemoveFromCartAsync(string cartItemId);
 
     }
 

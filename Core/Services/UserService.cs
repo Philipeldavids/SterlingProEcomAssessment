@@ -22,11 +22,7 @@ namespace Core.Services
             _jwtTokenService = jwtTokenService;
         }
 
-        public async Task<bool> RegisterUser(User user)
-        {
-            return true;
-        }
-
+      
         public async Task<(bool Success, string Token)> AuthenticateUser(string Email, string Password)
         {
             var user = await _userRepo.GetUserByEmail(Email);

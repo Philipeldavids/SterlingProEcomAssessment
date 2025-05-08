@@ -9,12 +9,12 @@ namespace Core.Interfaces
 {
     public interface ICartRepo
     {
-        Task AddToCartAsync(string userId, string productId, int quantity);
+        Task AddToCartAsync( string productId, int quantity);
 
-        Task<List<CartItem>> GetCartItemsAsync(string userId);
+        Task<List<CartItem>> GetCartItemsAsync();
 
-        Task<int> GetCartItemCountAsync(string userId);
+        Task<int> GetCartItemCountAsync();
 
-        Task RemoveFromCartAsync(string cartItemId, string userId);
+        Task RemoveFromCartAsync(string cartItemId);
     }
 }

@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace SterlingProEcommerce.Controllers
 {
-    [Authorize]
+ 
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
@@ -20,19 +20,25 @@ namespace SterlingProEcommerce.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var items = await _cartService.GetCartItemsAsync(userId);
+            
+            //if(userId == null)
+            //{
+            //    return RedirectToAction("Login", "Account");
+            //}
+            var items = await _cartService.GetCartItemsAsync();
 
             List<CartItemViewModel> Items = new List<CartItemViewModel>();
+            CartItemViewModel model = new CartItemViewModel();
             foreach (var item in items)
-            { 
-                foreach(var itm in Items)
-                {
-                    itm.Quantity = item.Quantity;
-                    itm.Price = item.Product.Price;
-                    itm.Id = item.ProductId;
-                    itm.ProductName = item.Product.Name;
-                }
+            {
+
+                model.Quantity = item.Quantity;
+                model.Price = item.Product.Price;
+                model.Id = item.ProductId;
+                model.ProductName = item.Product.Name;
+
+                Items.Add(model);
+               
             }
             return View(new CartViewModel { Items = Items });
         }
@@ -40,24 +46,23 @@ namespace SterlingProEcommerce.Controllers
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] CartAddRequest request)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            await _cartService.AddToCartAsync(userId, request.ProductId, request.Quantity);
+                    
+
+            await _cartService.AddToCartAsync (request.ProductId, request.Quantity);
             return Ok();
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCartCount()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var count = await _cartService.GetCartItemCountAsync(userId);
+        public async Task<IActionResult> GetCartCount()        {
+           
+            var count = await _cartService.GetCartItemCountAsync();
             return Content(count.ToString());
         }
 
         [HttpPost]
         public async Task<IActionResult> Remove(string cartItemId)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            await _cartService.RemoveFromCartAsync(cartItemId, userId);
+            await _cartService.RemoveFromCartAsync(cartItemId);
             return RedirectToAction("Index");
         }
     }

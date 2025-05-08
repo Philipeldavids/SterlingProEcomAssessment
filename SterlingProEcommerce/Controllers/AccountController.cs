@@ -35,18 +35,15 @@ namespace SterlingProEcommerce.Controllers
             var result = await _userService.AuthenticateUser(model.Email, model.Password);
             if (result.Success)
             {
-                var handler = new JwtSecurityTokenHandler();
-                var token = handler.ReadJwtToken(result.Token);
-
-                var claims = token.Claims.ToList(); // Use claims from token (e.g., name, role, etc.)
+                var token = result.Token;
+                var jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(token);
+                var claims = jwtToken.Claims;
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 var principal = new ClaimsPrincipal(identity);
 
-                // Sign in the user
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                //ViewBag.Token = result.Token;
                 HttpContext.Session.SetString("JWTToken", result.Token);
 
                 // ✅ Check if the user is an admin
